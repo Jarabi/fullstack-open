@@ -7,7 +7,19 @@ const App = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        if (newName) setPersons([...persons, { name: newName }]);
+        if (newName) {
+            const cleanedName = newName.trim();
+            if (
+                persons.find(
+                    (person) =>
+                        person.name.toLowerCase() === cleanedName.toLowerCase()
+                )
+            ) {
+                alert(`${cleanedName} is already added to phonebook`);
+            } else {
+                setPersons([...persons, { name: cleanedName }]);
+            }
+        }
         setNewName('');
     };
 

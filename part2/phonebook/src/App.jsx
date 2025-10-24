@@ -41,6 +41,18 @@ const App = () => {
         }
     };
 
+    const handleRemove = (id, name) => {
+        const confirmRemove = window.confirm(`Delete ${name}`);
+
+        if (confirmRemove) {
+            personServices.remove(id).then((status) => {
+                if (status === 200) {
+                    setPersons(persons.filter((person) => person.id !== id));
+                }
+            });
+        }
+    };
+
     const filterPersons = search
         ? persons.filter((person) => person.name.toLowerCase().includes(search))
         : persons;
@@ -59,7 +71,7 @@ const App = () => {
             />
             <h3>Numbers</h3>
             {persons ? (
-                <Persons persons={filterPersons} />
+                <Persons persons={filterPersons} onRemove={handleRemove} />
             ) : (
                 <p>Loading contacts...</p>
             )}

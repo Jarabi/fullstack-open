@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import Filter from './components/Filter';
 import Persons from './components/Persons';
 import PersonForm from './components/PersonForm';
+
+// Services
+import personServices from './services/persons';
 
 const App = () => {
     const [persons, setPersons] = useState([]);
@@ -11,9 +13,7 @@ const App = () => {
     const [search, setSearch] = useState('');
 
     useEffect(() => {
-        axios
-            .get('http://localhost:3001/persons')
-            .then((res) => setPersons(res.data));
+        personServices.getAll().then((data) => setPersons(data));
     }, []);
 
     const handleSubmit = (event) => {
@@ -29,18 +29,16 @@ const App = () => {
             ) {
                 alert(`${cleanedName} is already added to phonebook`);
             } else {
-                setPersons([
-                    ...persons,
-                    {
+                personServices
+                    .create({
                         name: cleanedName,
                         number: newNumber,
-                        id: persons.length + 1,
-                    },
-                ]);
+                    })
+                    .then((data) => setPersons(persons.concat(data)));
+                setNewName('');
+                setNewNumber('');
             }
         }
-        setNewName('');
-        setNewNumber('');
     };
 
     const filterPersons = search
@@ -60,7 +58,11 @@ const App = () => {
                 onFormSubmit={handleSubmit}
             />
             <h3>Numbers</h3>
-            <Persons persons={filterPersons} />
+            {persons ? (
+                <Persons persons={filterPersons} />
+            ) : (
+                <p>Loading contacts...</p>
+            )}
         </div>
     );
 };

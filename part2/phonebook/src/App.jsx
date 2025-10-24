@@ -21,13 +21,34 @@ const App = () => {
 
         if (newName) {
             const cleanedName = newName.trim();
-            if (
-                persons.find(
-                    (person) =>
-                        person.name.toLowerCase() === cleanedName.toLowerCase()
-                )
-            ) {
-                alert(`${cleanedName} is already added to phonebook`);
+            const personExists = persons.find(
+                (person) =>
+                    person.name.toLowerCase() === cleanedName.toLowerCase()
+            );
+
+            if (personExists) {
+                const approveReplace = window.confirm(
+                    `${cleanedName} is already added to phonebook. Replace the old number with the new one?`
+                );
+
+                if (approveReplace) {
+                    const updatedPerson = {
+                        name: cleanedName,
+                        number: newNumber,
+                    };
+
+                    personServices
+                        .update(personExists.id, updatedPerson)
+                        .then((returnedPerson) =>
+                            setPersons(
+                                persons.map((person) =>
+                                    person.id === personExists.id
+                                        ? returnedPerson
+                                        : person
+                                )
+                            )
+                        );
+                }
             } else {
                 personServices
                     .create({
@@ -35,9 +56,9 @@ const App = () => {
                         number: newNumber,
                     })
                     .then((data) => setPersons(persons.concat(data)));
-                setNewName('');
-                setNewNumber('');
             }
+            setNewName('');
+            setNewNumber('');
         }
     };
 

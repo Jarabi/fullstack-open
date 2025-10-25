@@ -2,15 +2,22 @@ import { useState, useEffect } from 'react';
 import Filter from './components/Filter';
 import Persons from './components/Persons';
 import PersonForm from './components/PersonForm';
+import Notification from './components/Notification';
 
 // Services
 import personServices from './services/persons';
+import notificationServices from './services/notifications';
 
 const App = () => {
     const [persons, setPersons] = useState([]);
     const [newName, setNewName] = useState('');
     const [newNumber, setNewNumber] = useState('');
     const [search, setSearch] = useState('');
+    const [notification, setNotification] = useState({
+        type: null,
+        text: null,
+    });
+    const notify = notificationServices.createNotifier(setNotification);
 
     useEffect(() => {
         personServices.getAll().then((data) => setPersons(data));
@@ -48,6 +55,7 @@ const App = () => {
                                 )
                             )
                         );
+                    notify(`Phone number for ${cleanedName} updated`);
                 }
             } else {
                 personServices
@@ -56,6 +64,7 @@ const App = () => {
                         number: newNumber,
                     })
                     .then((data) => setPersons(persons.concat(data)));
+                notify(`Added ${cleanedName}`);
             }
             setNewName('');
             setNewNumber('');
@@ -66,11 +75,19 @@ const App = () => {
         const confirmRemove = window.confirm(`Delete ${name}`);
 
         if (confirmRemove) {
-            personServices.remove(id).then((status) => {
-                if (status === 200) {
-                    setPersons(persons.filter((person) => person.id !== id));
-                }
-            });
+            try {
+                personServices.remove(id).then((status) => {
+                    if (status === 200) {
+                        setPersons(
+                            persons.filter((person) => person.id !== id)
+                        );
+                    }
+                });
+                notify(`${name} removed successfully`);
+            } catch (error) {
+                notify('An error occurred while removing user', 'error');
+                console.error(error);
+            }
         }
     };
 
@@ -81,6 +98,12 @@ const App = () => {
     return (
         <div>
             <h2>Phonebook</h2>
+            {notification.text && (
+                <Notification
+                    type={notification.type}
+                    text={notification.text}
+                />
+            )}
             <Filter value={search} setValue={setSearch} />
             <h3>Add new</h3>
             <PersonForm

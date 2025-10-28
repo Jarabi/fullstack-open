@@ -15,6 +15,7 @@ Small React app to search countries and view details (including capital weather)
 1. Install dependencies
 ```bash
 git clone <Repository>
+cd part/countries
 npm install
 ```
 
@@ -28,11 +29,6 @@ REACT_APP_WEATHER_API_KEY=your_openweathermap_api_key_here
 3. Run in development
 ```bash
 npm start
-```
-
-Build
-```bash
-npm run build
 ```
 
 ## Project structure (important files)

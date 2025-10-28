@@ -1,11 +1,30 @@
+import { useState } from 'react';
 import Language from './Language';
 
-const CountryDetails = ({ country }) => {
-    if (!country) {
-        return <p>Loading country list...</p>;
-    }
+import weatherService from '../services/weather';
+import { useEffect } from 'react';
 
-    const { name, capital, area, languages, flags } = country;
+const CountryDetails = ({ country }) => {
+    const [weatherInfo, setWeatherInfo] = useState(null);
+
+    const {
+        name,
+        cca2: countryCode,
+        capital,
+        area,
+        languages,
+        flags,
+    } = country;
+
+    useEffect(() => {
+        weatherService
+            .getWeatherInfo(name.common, countryCode)
+            .then((weatherData) => setWeatherInfo(weatherData));
+    }, [name, countryCode]);
+
+    const temperature = weatherInfo?.main?.temp;
+    const wind = weatherInfo?.wind?.speed;
+    const weather = weatherInfo?.weather?.[0];
 
     return (
         <>
@@ -25,6 +44,27 @@ const CountryDetails = ({ country }) => {
                 ))}
             </ul>
             <img src={flags.png} alt={flags.alt} />
+
+            {capital && capital.length > 0 ? (
+                <>
+                    <h2>Weather in {capital[0]}</h2>
+                    <p>
+                        <strong>Temperature</strong> {temperature ?? 'N/A'}{' '}
+                        Celcius
+                    </p>
+                    {weather?.icon && (
+                        <img
+                            src={`https://openweathermap.org/img/wn/${weather.icon}@2x.png`}
+                            alt={`${weather.description ?? ''}`}
+                        />
+                    )}
+                    <p>
+                        <strong>Wind</strong> {wind ?? 'N/A'} m/s
+                    </p>
+                </>
+            ) : (
+                <h3>No capital info</h3>
+            )}
         </>
     );
 };

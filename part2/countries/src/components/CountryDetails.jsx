@@ -1,13 +1,18 @@
 import Language from './Language';
 
 const CountryDetails = ({ country }) => {
-    const { name, capital, area, languages, flag } = country;
+    if (!country) {
+        return <p>Loading country list...</p>;
+    }
+
+    const { name, capital, area, languages, flags } = country;
 
     return (
         <>
             <h1>{name.common}</h1>
             <p>
-                <strong>Capital</strong> {capital[0]}
+                <strong>Capital</strong>{' '}
+                {capital && capital.length > 0 ? capital[0] : 'N/A'}
             </p>
             <p>
                 <strong>Area</strong> {area.toLocaleString()}
@@ -16,10 +21,10 @@ const CountryDetails = ({ country }) => {
             <h2>Languages</h2>
             <ul>
                 {Object.values(languages).map((language) => (
-                    <Language language={language} />
+                    <Language key={language} language={language} />
                 ))}
             </ul>
-            <span style={{ fontSize: '6rem' }}>{flag}</span>
+            <img src={flags.png} alt={flags.alt} />
         </>
     );
 };

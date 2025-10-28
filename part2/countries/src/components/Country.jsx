@@ -1,5 +1,17 @@
-const Country = ({country}) => {
-    return <p>{country.name.common}</p>
-}
+const Country = ({ country, selected, onSelectCountry }) => {
+    const countryName = country.name.common;
+    const buttonText = selected === countryName ? 'Hide' : 'Show';
 
-export default Country
+    return (
+        <tr>
+            <td>{countryName}</td>
+            <td>
+                <button onClick={() => onSelectCountry(countryName)}>
+                    {buttonText}
+                </button>
+            </td>
+        </tr>
+    );
+};
+
+export default Country;

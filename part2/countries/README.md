@@ -30,7 +30,6 @@ REACT_APP_WEATHER_API_KEY=your_openweathermap_api_key_here
 ```bash
 npm start
 ```
-
 ## Project structure (important files)
 
 - src/App.jsx — main app, manages countries, filter and selection

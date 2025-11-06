@@ -14,9 +14,9 @@ Quick start
 
 1. Change to the app folder you want to run, install and start:
 
-   ```bash
    # example: run countries app
-   cd /home/alex/Documents/Projects/fullstackopen/part2/countries
+   ```bash
+   cd fullstackopen/part2/countries
    npm install
    npm start
    ```
@@ -58,5 +58,3 @@ APIs used
 License
 
 - MIT
-
-If you need the README tailored for a specific app (e.g. countries or phonebook) let me know which app and I will update that app's README file.

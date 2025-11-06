@@ -3,7 +3,9 @@ const app = express();
 
 app.use(express.json());
 
-const persons = [
+const findPerson = (id) => persons.find((person) => person.id === id);
+
+let persons = [
     {
         id: '1',
         name: 'Arto Hellas',
@@ -40,13 +42,26 @@ app.get('/info', (req, res) => {
 });
 
 app.get('/api/persons/:id', (req, res) => {
-    const id = req.params.id;
-    const person = persons.find((person) => person.id === id);
+    const person = findPerson(req.params.id);
 
     if (!person) {
         res.status(404).end();
     } else {
         res.json(person);
+    }
+});
+
+app.delete('/api/persons/:id', (req, res) => {
+    const id = req.params.id;
+    const person = findPerson(id);
+
+    if (!person) {
+        res.status(404).json({
+            error: 'person not found',
+        });
+    } else {
+        persons = persons.filter((person) => person.id !== id);
+        res.status(204).end();
     }
 });
 

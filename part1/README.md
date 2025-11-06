@@ -1,16 +1,41 @@
-# React + Vite
+# Part 1 — Fundamentals of React
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This folder contains exercises and small React apps used in the "Full Stack Open" course (Part 1). Each exercise or small demo is typically placed in its own subfolder and is meant to be run independently.
 
-Currently, two official plugins are available:
+Included (typical) folders
+- exercises/ — numbered exercise folders (e.g. exercises/1.1, exercises/1.2, ...)
+- unicafe — simple feedback app (buttons, state)
+- anecdotes — short app demonstrating routing and form handling
+- other small demo folders created while following the course
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Quick start
 
-## React Compiler
+1. Change to the app folder you want to run, install and start:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+cd fullstackopen/part1/<app-folder>
+npm install
+npm start
+```
 
-## Expanding the ESLint configuration
+2. Run tests (if present in the app):
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+npm test
+```
+
+Notes
+- Each app is independent. Install and run commands must be executed per app folder.
+- Some folders are exercises only (no dev server); others contain runnable React apps using Create React App or Vite.
+- When copying folders, exclude `node_modules` (use rsync or tar with `--exclude`).
+- Keep derived UI data computed from source state (do not store redundant derived state).
+- Guard access to nested properties from async sources using optional chaining (`obj?.prop`).
+
+Folder structure (example)
+- part1/
+  - exercises/
+  - unicafe/
+  - anecdotes/
+  - README.md
+
+If you want this README tailored to the exact subfolders in your part1 directory, tell me to list the folder contents or paste the folder names and I'll update the file accordingly.

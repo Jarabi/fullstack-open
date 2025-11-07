@@ -66,13 +66,38 @@ app.delete('/api/persons/:id', (req, res) => {
 });
 
 app.post('/api/persons', (req, res) => {
+    // Confirm name and number data is present
+    if (!req.body.name || !req.body.number) {
+        return res.status(400).json({
+            error: 'content missing',
+        });
+    }
+
+    // Trim any leading or trailing data
+    const newName = req.body.name.trim();
+    const newNumber = req.body.number.trim();
+
+    // Check if person already exist
+    const personExists = persons.find(
+        (p) => p.name.toLowerCase() === newName.toLowerCase()
+    );
+
+    if (personExists) {
+        return res.status(409).json({
+            error: 'name must be unique',
+        });
+    }
+
+    // Generate random id
     const id = Math.floor(Math.random() * 10000);
 
+    // Add new person object to persons db
     persons = persons.concat({
         id: String(id),
-        name: req.body.name,
-        number: req.body.number,
+        name: newName,
+        number: newNumber,
     });
+
     res.status(204).end();
 });
 

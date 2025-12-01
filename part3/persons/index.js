@@ -45,7 +45,7 @@ app.get('/api/persons/:id', (req, res) => {
     const person = findPerson(req.params.id);
 
     if (!person) {
-        res.status(404).end();
+        res.status(404).json({ error: 'Person does not exist.' });
     } else {
         res.json(person);
     }

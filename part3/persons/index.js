@@ -28,9 +28,20 @@ let persons = [
     },
 ];
 
+// Custom token
+morgan.token('body', (req, res) => {
+    // Only log body for POST requests
+    if (req.method === 'POST') {
+        return JSON.stringify(req.body)
+    }
+    return ''
+})
+
+const customLogFormat = ':method :url :status :res[content-length] - :response-time ms :body'
+
 // Middleware
 app.use(express.json());
-app.use(morgan('tiny'));
+app.use(morgan(customLogFormat));
 
 app.get('/', (req, res) => res.send('<h1>Persons Diary</p>'));
 
@@ -102,7 +113,7 @@ app.post('/api/persons', (req, res) => {
         number: newNumber,
     });
 
-    res.status(204).end();
+    res.status(204).json({ message: 'user created' });
 });
 
 const PORT = 3001;
